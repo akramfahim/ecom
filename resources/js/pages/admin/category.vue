@@ -69,7 +69,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Create Now</button>
+                        <button type="button" class="btn btn-primary" @click="submitCategroyForm">Create Now</button>
                     </div>
                 </div>
             </div>
@@ -86,6 +86,11 @@ export default {
             data : {
                 categoryName: '',
             },
+        }
+    },
+    methods: {
+        submitCategroyForm(){
+            this.swr();
         }
     },
 
