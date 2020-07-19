@@ -5,6 +5,9 @@ Vue.use(Router)
 import aboutUs from './pages/about-us'
 import privacyPolicy from './pages/privacy-policy'
 
+//Admin Area
+import category from './pages/admin/category'
+
 const routes = [
     {
         path: '/about-us',
@@ -13,6 +16,12 @@ const routes = [
     {
         path: '/privacy-policy',
         component: privacyPolicy
+    },
+
+    //Admin Area
+    {
+        path: '/category',
+        component: category
     }
 ];
 

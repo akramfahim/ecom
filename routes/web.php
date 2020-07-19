@@ -23,3 +23,13 @@ Route::get('/welcome', function () {
 Route::any('{slug}',function(){
     return view('admin');
 });
+
+
+
+
+
+
+// Admin Area
+
+//category Crud
+Route::post('/app/add_category', 'AdminController@addCategory');

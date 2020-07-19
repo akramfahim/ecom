@@ -26,20 +26,28 @@
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                        <router-link to="about-us" class="nav-link">
-                            <i class="nav-icon fas fa-info-circle"></i>
-                            <p>
-                            About Us
-                            </p>
-                        </router-link>
+                            <router-link to="category" class="nav-link">
+                                <i class="nav-icon fas fa-certificate"></i>
+                                <p>
+                                    Category
+                                </p>
+                            </router-link>
                         </li>
                         <li class="nav-item">
-                        <router-link to="privacy-policy" class="nav-link">
-                            <i class="nav-icon fas fa-book-open"></i>
-                            <p>
-                            Privacy Policy
-                            </p>
-                        </router-link>
+                            <router-link to="about-us" class="nav-link">
+                                <i class="nav-icon fas fa-info-circle"></i>
+                                <p>
+                                    About Us
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="privacy-policy" class="nav-link">
+                                <i class="nav-icon fas fa-book-open"></i>
+                                <p>
+                                    Privacy Policy
+                                </p>
+                            </router-link>
                         </li>
                     </ul>
                 </nav>
@@ -47,5 +55,6 @@
             </div>
             <!-- /.sidebar -->
         </aside>
+
     </div>
 </template>
