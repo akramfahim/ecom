@@ -7,6 +7,7 @@ import privacyPolicy from './pages/privacy-policy'
 
 //Admin Area
 import category from './pages/admin/category'
+import product from './pages/admin/product'
 
 const routes = [
     {
@@ -22,6 +23,10 @@ const routes = [
     {
         path: '/category',
         component: category
+    },
+    {
+        path: '/product',
+        component: product
     }
 ];
 

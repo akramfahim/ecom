@@ -36,3 +36,6 @@ Route::post('/app/add_category', 'AdminController@addCategory');
 Route::get('/app/all_categories', 'AdminController@allCategories');
 Route::post('/app/edit_category', 'AdminController@editCategory');
 Route::post('/app/delete_category', 'AdminController@deleteCategory');
+
+//product CRUD
+Route::post('/app/add_product','AdminController@addProduct');

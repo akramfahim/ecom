@@ -34,6 +34,14 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
+                            <router-link to="product" class="nav-link">
+                                <i class="nav-icon fas fa-list-alt"></i>
+                                <p>
+                                    Product
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
                             <router-link to="about-us" class="nav-link">
                                 <i class="nav-icon fas fa-info-circle"></i>
                                 <p>
