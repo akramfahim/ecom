@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('productName')->unique();
             $table->text('productDescription');
             $table->float('productPrice',8,2)->unsigned();
-            $table->string('productImage')->default('defaultProductImage.png');
+            $table->string('productImage')->nullable()->default('defaultProduct.png');
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');

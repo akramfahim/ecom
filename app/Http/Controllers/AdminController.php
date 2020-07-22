@@ -46,6 +46,13 @@ class AdminController extends Controller
 
 
     // Product
+    //Get All Product List
+    public function allProducts()
+    {
+        return Product::orderBy('id','desc')->get();
+    }
+
+    //Add new Product
     public function addProduct(Request $request)
     {
         $this->validate($request,[
@@ -53,43 +60,48 @@ class AdminController extends Controller
             'productDescription' => 'required',
             'productPrice' => 'required|numeric|gt:0',
             'category_id' => 'required',
+            'productImage' => 'sometimes'
         ]);
 
-        $image = $request->productImage;
-        $file = $this->getFileName($image);
-        $path = public_path().'/uploads/'.$file;
-        file_put_contents($path, $file);
+        // $imageName = time().'.'.$request->productImage->extension();  
+        // $request->productImage->move(public_path('uploads'), $imageName);
 
-        $request->request->add(['productImage' => $file]);
+        // $image = time().'.' . explode('/', explode(':', substr($request->productImage, 0, strpos($request->productImage, ';')))[1])[1];
 
-        //return $request->all();
-
-        return Product::create([
-            'productName' => $request->productName,
-            'productDescription' => $request->productDescription,
-            'category_id' => $request->category_id,
-            'productPrice' => $request->productPrice,
-            'productImage' => $file,
-            'productStatus' => $request->productStatus
-        ]);
-
-
-    }
-
-    public function getFileName($file)
-    {
-        $exploded = explode(',' , $file);
-
+        $exploded = explode(',',$request->productImage);
         $decoded = base64_decode($exploded[1]);
 
         if(str_contains($exploded[0],'jpeg')){
+            $extension = 'jpeg';
+        }else if(str_contains($exploded[0],'jpg')){
             $extension = 'jpg';
         }else{
             $extension = 'png';
         }
 
-        $filename = time().'.'.$extension;
+        $fileName = time().'.'.$extension ;
 
-        return $filename;
+        
+        //return $request->all();
+
+        $created = Product::create([
+            'productName' => $request->productName,
+            'productDescription' => $request->productDescription,
+            'category_id' => $request->category_id,
+            'productPrice' => $request->productPrice,
+            'productImage' => $fileName,
+            'productStatus' => $request->productStatus
+        ]);
+        if($created){
+            $path = public_path().'/uploads/'.$fileName ;
+            file_put_contents($path,$decoded);
+            return response()->json([
+                'msg' => 'Product Uploaded Successfully',
+                'product' => $created
+            ],201);
+        }
+
+
     }
+
 }

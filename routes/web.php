@@ -39,3 +39,4 @@ Route::post('/app/delete_category', 'AdminController@deleteCategory');
 
 //product CRUD
 Route::post('/app/add_product','AdminController@addProduct');
+Route::get('/app/all_products','AdminController@allProducts');

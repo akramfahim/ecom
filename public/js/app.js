@@ -2449,6 +2449,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2460,6 +2466,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         productImage: '',
         productStatus: ''
       },
+      products: [],
       categories: []
     };
   },
@@ -2488,22 +2495,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    uploadPhoto: function uploadPhoto(element) {
+    loadProducts: function loadProducts() {
       var _this2 = this;
-
-      var file = element.target.files[0]; //console.log(file)
-
-      var reader = new FileReader();
-
-      reader.onloadend = function (file) {
-        //console.log('RESULT', reader.result)
-        _this2.data.productImage = reader.result;
-      };
-
-      reader.readAsDataURL(file);
-    },
-    createProduct: function createProduct() {
-      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var res;
@@ -2511,84 +2504,132 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(_this3.data.productName.trim() == '')) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt("return", _this3.error('Product Name is required'));
+                _context2.next = 2;
+                return _this2.callApi('get', '/app/all_products');
 
               case 2:
-                if (!(_this3.data.productDescription.trim() == '')) {
-                  _context2.next = 4;
-                  break;
-                }
-
-                return _context2.abrupt("return", _this3.error('Description is required'));
+                res = _context2.sent;
+                _this2.products = res.data;
 
               case 4:
-                if (!(_this3.data.category_id == '')) {
-                  _context2.next = 6;
-                  break;
-                }
-
-                return _context2.abrupt("return", _this3.error('Category is required'));
-
-              case 6:
-                if (!(_this3.data.productPrice.trim() == '')) {
-                  _context2.next = 8;
-                  break;
-                }
-
-                return _context2.abrupt("return", _this3.error('Price is required'));
-
-              case 8:
-                _context2.next = 10;
-                return _this3.callApi('post', '/app/add_product', _this3.data);
-
-              case 10:
-                res = _context2.sent;
-
-                if (res.data == 201) {
-                  $('#addNewModal').modal('hide');
-                } else if (res.status == 422) {
-                  if (res.data.errors.productName) {
-                    _this3.error(res.data.errors.productName[0]);
-                  } else if (res.data.errors.productDescription) {
-                    _this3.error(res.data.errors.productDescription[0]);
-                  } else if (res.data.errors.productPrice) {
-                    _this3.error(res.data.errors.productPrice[0]);
-                  }
-                } else {
-                  _this3.swr();
-                }
-
-              case 12:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
       }))();
+    },
+    uploadPhoto: function uploadPhoto(element) {
+      var _this3 = this;
+
+      var file = element.target.files[0]; //console.log(file)
+
+      var reader = new FileReader();
+
+      reader.onloadend = function (file) {
+        //console.log('RESULT', reader.result)
+        _this3.data.productImage = reader.result;
+      };
+
+      reader.readAsDataURL(file);
+    },
+    createProduct: function createProduct() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!(_this4.data.productName.trim() == '')) {
+                  _context3.next = 2;
+                  break;
+                }
+
+                return _context3.abrupt("return", _this4.error('Product Name is required'));
+
+              case 2:
+                if (!(_this4.data.productDescription.trim() == '')) {
+                  _context3.next = 4;
+                  break;
+                }
+
+                return _context3.abrupt("return", _this4.error('Description is required'));
+
+              case 4:
+                if (!(_this4.data.category_id == '')) {
+                  _context3.next = 6;
+                  break;
+                }
+
+                return _context3.abrupt("return", _this4.error('Category is required'));
+
+              case 6:
+                if (!(_this4.data.productPrice.trim() == '')) {
+                  _context3.next = 8;
+                  break;
+                }
+
+                return _context3.abrupt("return", _this4.error('Price is required'));
+
+              case 8:
+                _context3.next = 10;
+                return _this4.callApi('post', '/app/add_product', _this4.data);
+
+              case 10:
+                res = _context3.sent;
+
+                if (res.status == 201) {
+                  _this4.products.unshift(res.data.product);
+
+                  $('#addNewModal').modal('hide');
+
+                  _this4.success('Product Added Successfully');
+                } else if (res.status == 422) {
+                  if (res.data.errors.productName) {
+                    _this4.error(res.data.errors.productName[0]);
+                  } else if (res.data.errors.productDescription) {
+                    _this4.error(res.data.errors.productDescription[0]);
+                  } else if (res.data.errors.productPrice) {
+                    _this4.error(res.data.errors.productPrice[0]);
+                  } else if (res.data.errors.productImage) {
+                    _this4.error(res.data.errors.productImage[0]);
+                  }
+                } else {
+                  _this4.swr();
+                }
+
+              case 12:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this5 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.next = 2;
-              return _this4.loadCategory();
+              _context4.next = 2;
+              return _this5.loadCategory();
 
             case 2:
+              _context4.next = 4;
+              return _this5.loadProducts();
+
+            case 4:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3);
+      }, _callee4);
     }))();
   }
 });
@@ -43640,7 +43681,48 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "card" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body table-responsive p-0" }, [
+        _c("table", { staticClass: "table table-hover text-nowrap" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.products, function(product, index) {
+              return _vm.products.length
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(index + 1))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(product.productName))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(product.productDescription))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c("img", {
+                        attrs: {
+                          src: "/uploads/" + product.productImage,
+                          alt: "Product Image",
+                          width: "50",
+                          height: "40"
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(product.productPrice))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(product.category_id))]),
+                    _vm._v(" "),
+                    _vm._m(2, true)
+                  ])
+                : _vm._e()
+            }),
+            0
+          )
+        ])
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -43662,7 +43744,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
+              _vm._m(3),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
@@ -43679,7 +43761,7 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
-                          attrs: { type: "text", placeholder: "Category Name" },
+                          attrs: { type: "text", placeholder: "Product Name" },
                           domProps: { value: _vm.data.productName },
                           on: {
                             input: function($event) {
@@ -43911,86 +43993,70 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _c("h2", { staticClass: "card-title" }, [
-          _vm._v("\n                Category List\n            ")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-tools" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-sm btn-success",
-              attrs: { "data-toggle": "modal", "data-target": "#addNewModal" }
-            },
-            [
-              _c("i", { staticClass: "fas fa-plus" }),
-              _vm._v(" \n                    Create Category\n                ")
-            ]
-          )
-        ])
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h2", { staticClass: "card-title" }, [
+        _vm._v("\n                Product List\n            ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body table-responsive p-0" }, [
-        _c("table", { staticClass: "table table-hover text-nowrap" }, [
-          _c("thead", [
-            _c("tr", [
-              _c("th", [_vm._v("ID")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Product Name")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Category")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Price")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Action")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v("1")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Iphone 6")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Mobile Phone")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("6000")]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-primary btn-sm",
-                    attrs: { href: "#" }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-edit" }),
-                    _vm._v(
-                      "\n                                Edit\n                            "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger btn-sm",
-                    attrs: { type: "button" }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-trash" }),
-                    _vm._v(
-                      "\n                                Delete\n                            "
-                    )
-                  ]
-                )
-              ])
-            ])
-          ])
-        ])
+      _c("div", { staticClass: "card-tools" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-sm btn-success",
+            attrs: { "data-toggle": "modal", "data-target": "#addNewModal" }
+          },
+          [
+            _c("i", { staticClass: "fas fa-plus" }),
+            _vm._v(" \n                    Create Product\n                ")
+          ]
+        )
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Product Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Product Description")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Product Image")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Category")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("a", { staticClass: "btn btn-primary btn-sm", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fas fa-edit" }),
+        _vm._v(
+          "\n                                Edit\n                            "
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
+        [
+          _c("i", { staticClass: "fas fa-trash" }),
+          _vm._v(
+            "\n                                Delete\n                            "
+          )
+        ]
+      )
     ])
   },
   function() {

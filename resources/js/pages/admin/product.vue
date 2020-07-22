@@ -4,13 +4,13 @@
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">
-                    Category List
+                    Product List
                 </h2>
 
                 <div class="card-tools">
                     <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addNewModal">
                         <i class="fas fa-plus"></i> 
-                        Create Category
+                        Create Product
                     </button>
                 </div>
             </div>
@@ -21,17 +21,23 @@
                         <tr>
                             <th>ID</th>
                             <th>Product Name</th>
-                            <th>Category</th>
+                            <th>Product Description</th>
+                            <th>Product Image</th>
                             <th>Price</th>
+                            <th>Category</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Iphone 6</td>
-                            <td>Mobile Phone</td>
-                            <td>6000</td>
+                        <tr v-for="(product,index) in products" :key="index" v-if="products.length">
+                            <td>{{index+1}}</td>
+                            <td>{{ product.productName}}</td>
+                            <td>{{ product.productDescription}}</td>
+                            <td>
+                                <img :src="`/uploads/${product.productImage}`" alt="Product Image" width="50" height="40">
+                            </td>
+                            <td>{{product.productPrice}}</td>
+                            <td>{{ product.category_id}}</td>
                             <td>
                                 <a href="#" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
@@ -64,7 +70,7 @@
                             <div class="row">
                                 <div class="col-7">
                                     <div class="form-group">
-                                        <input type="text" v-model="data.productName" class="form-control" placeholder="Category Name">
+                                        <input type="text" v-model="data.productName" class="form-control" placeholder="Product Name">
                                     </div>
                                     <div class="form-group">
                                         <textarea class="form-control" v-model="data.productDescription" id="description" rows="5" placeholder="Product Description"></textarea>
@@ -122,6 +128,7 @@ export default {
                 productImage : '',
                 productStatus: ''
             },
+            products: [],
             categories: []
 
         }
@@ -130,6 +137,10 @@ export default {
         async loadCategory(){
             const categories = await this.callApi('get','/app/all_categories')
             this.categories = categories.data
+        },
+        async loadProducts(){
+            const res = await this.callApi('get','/app/all_products')
+            this.products = res.data
         },
 
         uploadPhoto(element){
@@ -150,8 +161,10 @@ export default {
             if(this.data.productPrice.trim()=='') return this.error('Price is required')
 
             const res = await this.callApi('post','/app/add_product',this.data)
-            if(res.data == 201){
+            if(res.status == 201){
+                this.products.unshift(res.data.product)
                 $('#addNewModal').modal('hide')
+                this.success('Product Added Successfully');
             }else if(res.status == 422){
                 if(res.data.errors.productName){
                     this.error(res.data.errors.productName[0])
@@ -159,6 +172,8 @@ export default {
                     this.error(res.data.errors.productDescription[0])
                 }else if(res.data.errors.productPrice){
                     this.error(res.data.errors.productPrice[0])
+                }else if(res.data.errors.productImage){
+                    this.error(res.data.errors.productImage[0])
                 }
             }else{
                 this.swr()
@@ -167,6 +182,7 @@ export default {
     },
     async created(){
         await this.loadCategory()
+        await this.loadProducts()
     }
 
 }
