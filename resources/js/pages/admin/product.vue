@@ -25,6 +25,7 @@
                             <th>Product Image</th>
                             <th>Price</th>
                             <th>Category</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -37,9 +38,10 @@
                                 <img :src="`/uploads/${product.productImage}`" alt="Product Image" width="50" height="40">
                             </td>
                             <td>{{product.productPrice}}</td>
-                            <td>{{ product.category_id}}</td>
+                            <td>{{ product.category.categoryName}}</td>
+                            <td>{{ product.productStatus}}</td>
                             <td>
-                                <a href="#" class="btn btn-primary btn-sm">
+                                <a href="#" @click="showEditModal(product,index)" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                     Edit
                                 </a>
@@ -111,6 +113,60 @@
             </div>
         </div>
 
+        <!-- Edit Category Modal -->
+        <div class="modal fade" id="editModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-7">
+                                    <div class="form-group">
+                                        <input type="text" v-model="editData.productName" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" v-model="editData.productDescription" id="description" rows="5"></textarea>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-5">
+                                    <div class="form-group">
+                                        <select v-model="editData.category_id" class="form-control" id="status">
+                                            <option :value="category.id" v-for="(category,i) in categories" :key="i">{{ category.categoryName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" v-model="editData.productPrice" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="file" @change="updatePhoto" class="form-control-file" id="file1">
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control" id="status" v-model="editData.productStatus">
+                                            <option value="publish">Publish</option>
+                                            <option value="unpublish">Unpublish</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" >
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </template>
@@ -129,7 +185,16 @@ export default {
                 productStatus: ''
             },
             products: [],
-            categories: []
+            categories: [],
+
+            editData:{
+                productName: '',
+                productDescription: '',
+                category_id : '',
+                productPrice : '',
+                productImage : '',
+                productStatus: ''
+            }
 
         }
     },
@@ -153,6 +218,7 @@ export default {
             }
             reader.readAsDataURL(file);
         },
+
         async createProduct(){
 
             if(this.data.productName.trim()=='') return this.error('Product Name is required')
@@ -178,11 +244,27 @@ export default {
             }else{
                 this.swr()
             }
-        }
+        },
+
+        //show edit modal
+        showEditModal(product,index){
+            let obj = {
+                id : product.id,
+                productName: category.productName,
+                status : category.status
+            }
+            this.editData = obj
+            this.index = index
+            $('#editModal').modal('show')
+        },
     },
     async created(){
-        await this.loadCategory()
-        await this.loadProducts()
+        await Promise.all([
+            this.loadCategory(), 
+            this.loadProducts()
+        ])
+
+        console.log(this.products)
     }
 
 }

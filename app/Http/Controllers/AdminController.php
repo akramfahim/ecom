@@ -49,7 +49,7 @@ class AdminController extends Controller
     //Get All Product List
     public function allProducts()
     {
-        return Product::orderBy('id','desc')->get();
+        return Product::with('category')->orderBy('id','desc')->get();
     }
 
     //Add new Product
