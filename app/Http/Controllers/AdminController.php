@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Product;
+use Image;
 
 class AdminController extends Controller
 {
@@ -107,24 +108,20 @@ class AdminController extends Controller
     //upload Image 
     public function uploadImage(Request $request)
     {
-        $exploded = explode(',',$request);
-        $decoded = base64_decode($exploded[1]);
+        
+        $image_parts = explode(";base64,", $request);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1];
+        $image_base64 = base64_decode($image_parts[1]);
+        $file = time() . '. '.$image_type;
 
-        return $decoded;
+        //path
+        $path = public_path().'/uploads/'.$file;
 
-        if(str_contains($exploded[0],'jpg')){
-            $extension = 'jpg';
-        }else if(str_contains($exploded[0],'png')){
-            $extension = 'png';
-        }else{
-            $extension = 'jpeg';
-        }
+        file_put_contents($path, $image_base64);
 
-        $fileName = time().'.'.$extension ;
-        $path = public_path().'/uploads/'.$fileName ;
-        file_put_contents($path,$decoded);
 
-        return $fileName;
+        return $file;
     }
 
 }

@@ -43896,10 +43896,10 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [
                       _c(
-                        "a",
+                        "button",
                         {
                           staticClass: "btn btn-primary btn-sm",
-                          attrs: { href: "#" },
+                          attrs: { type: "button" },
                           on: {
                             click: function($event) {
                               return _vm.showEditModal(product, index)
@@ -44211,7 +44211,7 @@ var render = function() {
               _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
-                _c("form", [
+                _c("form", { attrs: { enctype: "multipart/form-data" } }, [
                   _c("div", { staticClass: "row" }, [
                     _c("div", { staticClass: "col-7" }, [
                       _c("div", { staticClass: "form-group" }, [
@@ -60621,8 +60621,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! F:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! F:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

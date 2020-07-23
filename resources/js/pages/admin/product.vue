@@ -41,10 +41,10 @@
                             <td>{{ product.category_id}}</td>
                             <td>{{ product.productStatus}}</td>
                             <td>
-                                <a href="#" @click="showEditModal(product,index)" class="btn btn-primary btn-sm">
+                                <button type="button" @click="showEditModal(product,index)" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                     Edit
-                                </a>
+                                </button>
                                 <button type="button" class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i>
                                     Delete
@@ -124,7 +124,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-7">
                                     <div class="form-group">
