@@ -2124,7 +2124,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2511,6 +2510,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2528,10 +2532,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         productName: '',
         productDescription: '',
         category_id: '',
+        category: '',
         productPrice: '',
         productImage: '',
         productStatus: ''
-      }
+      },
+      index: -1
     };
   },
   methods: {
@@ -2597,113 +2603,215 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       reader.readAsDataURL(file);
     },
-    createProduct: function createProduct() {
+    updatePhoto: function updatePhoto(element) {
       var _this4 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                if (!(_this4.data.productName.trim() == '')) {
+      var file = element.target.files[0]; //console.log(file)
+
+      var reader = new FileReader();
+
+      reader.onloadend = /*#__PURE__*/function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(file) {
+          var res;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
                   _context3.next = 2;
+                  return _this4.callApi('post', '/app/upload_image', reader.result);
+
+                case 2:
+                  res = _context3.sent;
+
+                  //console.log(res.data)
+                  if (res.status == 200) {
+                    console.log(res.data);
+                    _this4.editData.productImage = res.data;
+                  }
+
+                case 4:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          }, _callee3);
+        }));
+
+        return function (_x) {
+          return _ref.apply(this, arguments);
+        };
+      }();
+
+      reader.readAsDataURL(file);
+    },
+    getProductImage: function getProductImage() {
+      var photo = this.editData.productImage != '' ? "/uploads/".concat(this.editData.productImage) : "/uploads/defaultProduct.png";
+      return photo;
+    },
+    createProduct: function createProduct() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                if (!(_this5.data.productName.trim() == '')) {
+                  _context4.next = 2;
                   break;
                 }
 
-                return _context3.abrupt("return", _this4.error('Product Name is required'));
+                return _context4.abrupt("return", _this5.error('Product Name is required'));
 
               case 2:
-                if (!(_this4.data.productDescription.trim() == '')) {
-                  _context3.next = 4;
+                if (!(_this5.data.productDescription.trim() == '')) {
+                  _context4.next = 4;
                   break;
                 }
 
-                return _context3.abrupt("return", _this4.error('Description is required'));
+                return _context4.abrupt("return", _this5.error('Description is required'));
 
               case 4:
-                if (!(_this4.data.category_id == '')) {
-                  _context3.next = 6;
+                if (!(_this5.data.category_id == '')) {
+                  _context4.next = 6;
                   break;
                 }
 
-                return _context3.abrupt("return", _this4.error('Category is required'));
+                return _context4.abrupt("return", _this5.error('Category is required'));
 
               case 6:
-                if (!(_this4.data.productPrice.trim() == '')) {
-                  _context3.next = 8;
+                if (!(_this5.data.productPrice.trim() == '')) {
+                  _context4.next = 8;
                   break;
                 }
 
-                return _context3.abrupt("return", _this4.error('Price is required'));
+                return _context4.abrupt("return", _this5.error('Price is required'));
 
               case 8:
-                _context3.next = 10;
-                return _this4.callApi('post', '/app/add_product', _this4.data);
+                _context4.next = 10;
+                return _this5.callApi('post', '/app/add_product', _this5.data);
 
               case 10:
-                res = _context3.sent;
+                res = _context4.sent;
 
                 if (res.status == 201) {
-                  _this4.products.unshift(res.data.product);
+                  _this5.products.unshift(res.data.product);
 
                   $('#addNewModal').modal('hide');
 
-                  _this4.success('Product Added Successfully');
+                  _this5.success('Product Added Successfully');
                 } else if (res.status == 422) {
                   if (res.data.errors.productName) {
-                    _this4.error(res.data.errors.productName[0]);
+                    _this5.error(res.data.errors.productName[0]);
                   } else if (res.data.errors.productDescription) {
-                    _this4.error(res.data.errors.productDescription[0]);
+                    _this5.error(res.data.errors.productDescription[0]);
                   } else if (res.data.errors.productPrice) {
-                    _this4.error(res.data.errors.productPrice[0]);
+                    _this5.error(res.data.errors.productPrice[0]);
                   } else if (res.data.errors.productImage) {
-                    _this4.error(res.data.errors.productImage[0]);
+                    _this5.error(res.data.errors.productImage[0]);
                   }
                 } else {
-                  _this4.swr();
+                  _this5.swr();
                 }
 
               case 12:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3);
+        }, _callee4);
       }))();
     },
     //show edit modal
     showEditModal: function showEditModal(product, index) {
       var obj = {
         id: product.id,
-        productName: category.productName,
-        status: category.status
+        productName: product.productName,
+        productDescription: product.productDescription,
+        productPrice: product.productPrice,
+        productImage: product.productImage,
+        category_id: product.category_id,
+        category: product.category.categoryName,
+        productStatus: product.productStatus
       };
       this.editData = obj;
       this.index = index;
       $('#editModal').modal('show');
+    },
+    submitEditProductForm: function submitEditProductForm() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                if (!(_this6.editData.productName.trim() == '')) {
+                  _context5.next = 2;
+                  break;
+                }
+
+                return _context5.abrupt("return", _this6.error('Product Name is Required'));
+
+              case 2:
+                if (!(_this6.editData.productDescription.trim() == '')) {
+                  _context5.next = 4;
+                  break;
+                }
+
+                return _context5.abrupt("return", _this6.error('Product Description is Required'));
+
+              case 4:
+                if (!(_this6.editData.productPrice.trim() == '')) {
+                  _context5.next = 6;
+                  break;
+                }
+
+                return _context5.abrupt("return", _this6.error('Product Price is Required'));
+
+              case 6:
+                if (!(_this6.editData.category_id == '')) {
+                  _context5.next = 8;
+                  break;
+                }
+
+                return _context5.abrupt("return", _this6.error('Product Category is Required'));
+
+              case 8:
+                if (!(_this6.editData.productStatus.trim() == '')) {
+                  _context5.next = 10;
+                  break;
+                }
+
+                return _context5.abrupt("return", _this6.error('Product Status is Required'));
+
+              case 10:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
     }
   },
   created: function created() {
-    var _this5 = this;
+    var _this7 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              _context4.next = 2;
-              return Promise.all([_this5.loadCategory(), _this5.loadProducts()]);
+              _context6.next = 2;
+              return Promise.all([_this7.loadCategory(), _this7.loadProducts()]);
 
             case 2:
-              console.log(_this5.products);
-
-            case 3:
             case "end":
-              return _context4.stop();
+              return _context6.stop();
           }
         }
-      }, _callee4);
+      }, _callee6);
     }))();
   }
 });
@@ -43585,10 +43693,6 @@ var render = function() {
                         }
                       },
                       [
-                        _c("option", { attrs: { value: "" } }, [
-                          _vm._v("Select Publication Status")
-                        ]),
-                        _vm._v(" "),
                         _c("option", { attrs: { value: "publish" } }, [
                           _vm._v("Publish")
                         ]),
@@ -43786,7 +43890,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(product.productPrice))]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(product.category.categoryName))]),
+                    _c("td", [_vm._v(_vm._s(product.category_id))]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(product.productStatus))]),
                     _vm._v(" "),
@@ -44241,12 +44345,25 @@ var render = function() {
                         })
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "form-group" }, [
-                        _c("input", {
-                          staticClass: "form-control-file",
-                          attrs: { type: "file", id: "file1" },
-                          on: { change: _vm.updatePhoto }
-                        })
+                      _c("div", { staticClass: "form-group row" }, [
+                        _c("div", { staticClass: "col-4" }, [
+                          _c("img", {
+                            attrs: {
+                              src: _vm.getProductImage(),
+                              alt: "Product Image",
+                              width: "100",
+                              height: "60"
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-8" }, [
+                          _c("input", {
+                            staticClass: "form-control-file",
+                            attrs: { type: "file", id: "file1" },
+                            on: { change: _vm.updatePhoto }
+                          })
+                        ])
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group" }, [
@@ -44299,7 +44416,30 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(5)
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Close")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.submitEditProductForm }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Update\n                    "
+                    )
+                  ]
+                )
+              ])
             ])
           ]
         )
@@ -44418,27 +44558,6 @@ var staticRenderFns = [
           }
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Close")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
-        [_vm._v("\n                        Update\n                    ")]
       )
     ])
   }

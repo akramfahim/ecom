@@ -104,4 +104,27 @@ class AdminController extends Controller
 
     }
 
+    //upload Image 
+    public function uploadImage(Request $request)
+    {
+        $exploded = explode(',',$request);
+        $decoded = base64_decode($exploded[1]);
+
+        return $decoded;
+
+        if(str_contains($exploded[0],'jpg')){
+            $extension = 'jpg';
+        }else if(str_contains($exploded[0],'png')){
+            $extension = 'png';
+        }else{
+            $extension = 'jpeg';
+        }
+
+        $fileName = time().'.'.$extension ;
+        $path = public_path().'/uploads/'.$fileName ;
+        file_put_contents($path,$decoded);
+
+        return $fileName;
+    }
+
 }

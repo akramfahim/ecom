@@ -100,7 +100,6 @@
                             </div>
                             <div class="form-group">
                                 <select class="form-control" id="status" v-model="editData.status">
-                                    <option value="">Select Publication Status</option>
                                     <option value="publish">Publish</option>
                                     <option value="unpublish">Unpublish</option>
                                 </select>

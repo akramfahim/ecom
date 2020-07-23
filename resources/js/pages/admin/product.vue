@@ -38,7 +38,7 @@
                                 <img :src="`/uploads/${product.productImage}`" alt="Product Image" width="50" height="40">
                             </td>
                             <td>{{product.productPrice}}</td>
-                            <td>{{ product.category.categoryName}}</td>
+                            <td>{{ product.category_id}}</td>
                             <td>{{ product.productStatus}}</td>
                             <td>
                                 <a href="#" @click="showEditModal(product,index)" class="btn btn-primary btn-sm">
@@ -138,14 +138,19 @@
                                 <div class="col-5">
                                     <div class="form-group">
                                         <select v-model="editData.category_id" class="form-control" id="status">
-                                            <option :value="category.id" v-for="(category,i) in categories" :key="i">{{ category.categoryName}}</option>
+                                            <option v-for="(category,i) in categories" :key="i" :value="category.id">{{ category.categoryName}}</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <input type="number" v-model="editData.productPrice" class="form-control">
                                     </div>
-                                    <div class="form-group">
-                                        <input type="file" @change="updatePhoto" class="form-control-file" id="file1">
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <img :src="getProductImage()" alt="Product Image" width="100" height="60">
+                                        </div>
+                                        <div class="col-8">
+                                            <input type="file" @change="updatePhoto" class="form-control-file" id="file1">
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <select class="form-control" id="status" v-model="editData.productStatus">
@@ -159,7 +164,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" >
+                        <button type="button" class="btn btn-primary" @click="submitEditProductForm">
                             Update
                         </button>
                     </div>
@@ -191,10 +196,12 @@ export default {
                 productName: '',
                 productDescription: '',
                 category_id : '',
+                category : '',
                 productPrice : '',
                 productImage : '',
                 productStatus: ''
-            }
+            },
+            index : -1
 
         }
     },
@@ -217,6 +224,26 @@ export default {
                 this.data.productImage = reader.result
             }
             reader.readAsDataURL(file);
+        },
+        updatePhoto(element){
+            var file = element.target.files[0];
+            //console.log(file)
+            var reader = new FileReader();
+            reader.onloadend = async (file) => {
+                //console.log('RESULT', reader.result)
+                const res =  await this.callApi('post','/app/upload_image', reader.result)
+                //console.log(res.data)
+                if(res.status==200){
+                    console.log(res.data)
+                    this.editData.productImage = res.data
+                }
+            }
+            reader.readAsDataURL(file);
+        },
+        getProductImage(){
+            let photo =  (this.editData.productImage != '') ? `/uploads/${this.editData.productImage}` : `/uploads/defaultProduct.png`
+
+             return photo
         },
 
         async createProduct(){
@@ -250,13 +277,27 @@ export default {
         showEditModal(product,index){
             let obj = {
                 id : product.id,
-                productName: category.productName,
-                status : category.status
+                productName: product.productName,
+                productDescription : product.productDescription,
+                productPrice: product.productPrice,
+                productImage: product.productImage,
+                category_id: product.category_id,
+                category: product.category.categoryName,
+                productStatus : product.productStatus
             }
             this.editData = obj
             this.index = index
             $('#editModal').modal('show')
         },
+        async submitEditProductForm(){
+            if(this.editData.productName.trim()=='') return this.error('Product Name is Required')
+            if(this.editData.productDescription.trim()=='') return this.error('Product Description is Required')
+            if(this.editData.productPrice.trim()=='') return this.error('Product Price is Required')
+            if(this.editData.category_id=='') return this.error('Product Category is Required')
+            if(this.editData.productStatus.trim()=='') return this.error('Product Status is Required')
+
+            //console.log(this.editData)
+        } 
     },
     async created(){
         await Promise.all([
@@ -264,7 +305,6 @@ export default {
             this.loadProducts()
         ])
 
-        console.log(this.products)
     }
 
 }
