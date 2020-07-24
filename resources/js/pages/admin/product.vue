@@ -202,7 +202,7 @@ export default {
                 productStatus: ''
             },
             index : -1,
-            isUpdating : true
+            isUpdating : false
 
         }
     },

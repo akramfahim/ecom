@@ -134,8 +134,17 @@ class AdminController extends Controller
             'category_id' => 'required',
             'productImage' => 'required',
         ]);
+        $product = Product::find($request->id);
+        $currentPhoto = $product->productImage;
+        
+        if($request->productImage != $currentPhoto){
+            $imageLocation = public_path().'/uploads/'.$currentPhoto;
+            if(file_exists($imageLocation)){
+                @unlink($imageLocation);
+            }
+        }
 
-        return Product::where('id', $request->id)->update([
+        return $product->update([
             'productName' => $request->productName,
             'productDescription' =>  $request->productDescription,
             'category_id' =>  $request->category_id,

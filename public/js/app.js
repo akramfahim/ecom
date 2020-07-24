@@ -2538,7 +2538,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         productStatus: ''
       },
       index: -1,
-      isUpdating: true
+      isUpdating: false
     };
   },
   methods: {
@@ -60694,8 +60694,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! F:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! F:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
