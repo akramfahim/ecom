@@ -38,14 +38,14 @@
                                 <img :src="`/uploads/${product.productImage}`" alt="Product Image" width="50" height="40">
                             </td>
                             <td>{{product.productPrice}}</td>
-                            <td>{{ product.category_id}}</td>
+                            <td>{{ product.category_id }}</td>
                             <td>{{ product.productStatus}}</td>
                             <td>
                                 <button type="button" @click="showEditModal(product,index)" class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                     Edit
                                 </button>
-                                <button type="button" class="btn btn-danger btn-sm">
+                                <button type="button" @click="deleteProduct(product,index)" class="btn btn-danger btn-sm">
                                     <i class="fas fa-trash"></i>
                                     Delete
                                 </button>
@@ -164,8 +164,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="submitEditProductForm">
-                            Update
+                        <button type="button" class="btn btn-primary" @click="submitEditProductForm" :disabled="isUpdating" :loading="isUpdating">
+                            {{ isUpdating ? 'Updating...' : 'Update Now'}}
                         </button>
                     </div>
                 </div>
@@ -201,7 +201,8 @@ export default {
                 productImage : '',
                 productStatus: ''
             },
-            index : -1
+            index : -1,
+            isUpdating : true
 
         }
     },
@@ -292,12 +293,41 @@ export default {
         async submitEditProductForm(){
             if(this.editData.productName.trim()=='') return this.error('Product Name is Required')
             if(this.editData.productDescription.trim()=='') return this.error('Product Description is Required')
-            if(this.editData.productPrice.trim()=='') return this.error('Product Price is Required')
+            if(this.editData.productPrice=='') return this.error('Product Price is Required')
             if(this.editData.category_id=='') return this.error('Product Category is Required')
             if(this.editData.productStatus.trim()=='') return this.error('Product Status is Required')
 
+            const res = await this.callApi('post','/app/edit_product', this.editData)
+            if(res.status == 200){
+
+                this.products[this.index].productName = this.editData.productName
+                this.products[this.index].productDescription = this.editData.productDescription
+                this.products[this.index].productPrice = this.editData.productPrice
+                this.products[this.index].category_id = this.editData.category_id
+                this.products[this.index].productImage = this.editData.productImage
+                this.products[this.index].productStatus = this.editData.productStatus
+
+                this.success('Product Update Successfully')
+
+                //close modal
+                $('#editModal').modal('hide')
+            }else{
+                this.error('Product Can not be updated')
+            }
+
             //console.log(this.editData)
-        } 
+        },
+        async deleteProduct(product, index){
+            if(!confirm('Are You Sure')) return
+    
+            const res = await this.callApi('post','/app/delete_product', product)
+            if(res.status == 200){
+                this.products.splice(index,1)
+                this.success('Product Deleted Successfully')
+            }else{
+                this.swr()
+            }
+        }
     },
     async created(){
         await Promise.all([

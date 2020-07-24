@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Product;
-use Image;
 
 class AdminController extends Controller
 {
@@ -113,7 +112,7 @@ class AdminController extends Controller
         $image_type_aux = explode("image/", $image_parts[0]);
         $image_type = $image_type_aux[1];
         $image_base64 = base64_decode($image_parts[1]);
-        $file = time() . '. '.$image_type;
+        $file = time() . '.'.$image_type;
 
         //path
         $path = public_path().'/uploads/'.$file;
@@ -122,6 +121,50 @@ class AdminController extends Controller
 
 
         return $file;
+    }
+
+    //Edit Product
+    public function editProduct(Request $request)
+    {
+        $this->validate($request, [
+            'id'=> 'required',
+            'productName' => 'required| unique:products,productName,'.$request->id,
+            'productDescription' => 'required',
+            'productPrice' => 'required',
+            'category_id' => 'required',
+            'productImage' => 'required',
+        ]);
+
+        return Product::where('id', $request->id)->update([
+            'productName' => $request->productName,
+            'productDescription' =>  $request->productDescription,
+            'category_id' =>  $request->category_id,
+            'productImage' =>  $request->productImage,
+            'productPrice' =>  $request->productPrice,
+            'productStatus' =>  $request->productStatus
+        ]);
+    }
+
+    //delete Product 
+    public function deleteProduct(Request $request)
+    {
+        $this->validate($request, [
+            'id'=> 'required'
+        ]);
+        $product = Product::find($request->id);
+        $imageName =  $product->productImage;
+        $imageLocation = public_path('uploads/').$imageName;
+        //return Category::where('id', $request->id)->delete();
+        $deleted = $product->delete();
+        if($deleted){
+            if(file_exists($imageLocation)){
+                @unlink($imageLocation);
+            }
+
+            return response()->json([
+                'msg' => 'Product Deleted Successfully'
+            ],200);
+        }
     }
 
 }

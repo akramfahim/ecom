@@ -40,6 +40,8 @@ Route::post('/app/delete_category', 'AdminController@deleteCategory');
 //product CRUD
 Route::post('/app/add_product','AdminController@addProduct');
 Route::get('/app/all_products','AdminController@allProducts');
+Route::post('/app/edit_product','AdminController@editProduct');
+Route::post('/app/delete_product','AdminController@deleteProduct');
 
 
 Route::post('/app/upload_image','AdminController@uploadImage');

@@ -2537,7 +2537,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         productImage: '',
         productStatus: ''
       },
-      index: -1
+      index: -1,
+      isUpdating: true
     };
   },
   methods: {
@@ -2743,6 +2744,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -2763,7 +2765,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context5.abrupt("return", _this6.error('Product Description is Required'));
 
               case 4:
-                if (!(_this6.editData.productPrice.trim() == '')) {
+                if (!(_this6.editData.productPrice == '')) {
                   _context5.next = 6;
                   break;
                 }
@@ -2787,31 +2789,94 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context5.abrupt("return", _this6.error('Product Status is Required'));
 
               case 10:
+                _context5.next = 12;
+                return _this6.callApi('post', '/app/edit_product', _this6.editData);
+
+              case 12:
+                res = _context5.sent;
+
+                if (res.status == 200) {
+                  _this6.products[_this6.index].productName = _this6.editData.productName;
+                  _this6.products[_this6.index].productDescription = _this6.editData.productDescription;
+                  _this6.products[_this6.index].productPrice = _this6.editData.productPrice;
+                  _this6.products[_this6.index].category_id = _this6.editData.category_id;
+                  _this6.products[_this6.index].productImage = _this6.editData.productImage;
+                  _this6.products[_this6.index].productStatus = _this6.editData.productStatus;
+
+                  _this6.success('Product Update Successfully'); //close modal
+
+
+                  $('#editModal').modal('hide');
+                } else {
+                  _this6.error('Product Can not be updated');
+                } //console.log(this.editData)
+
+
+              case 14:
               case "end":
                 return _context5.stop();
             }
           }
         }, _callee5);
       }))();
+    },
+    deleteProduct: function deleteProduct(product, index) {
+      var _this7 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (confirm('Are You Sure')) {
+                  _context6.next = 2;
+                  break;
+                }
+
+                return _context6.abrupt("return");
+
+              case 2:
+                _context6.next = 4;
+                return _this7.callApi('post', '/app/delete_product', product);
+
+              case 4:
+                res = _context6.sent;
+
+                if (res.status == 200) {
+                  _this7.products.splice(index, 1);
+
+                  _this7.success('Product Deleted Successfully');
+                } else {
+                  _this7.swr();
+                }
+
+              case 6:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
     }
   },
   created: function created() {
-    var _this7 = this;
+    var _this8 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _context6.next = 2;
-              return Promise.all([_this7.loadCategory(), _this7.loadProducts()]);
+              _context7.next = 2;
+              return Promise.all([_this8.loadCategory(), _this8.loadProducts()]);
 
             case 2:
             case "end":
-              return _context6.stop();
+              return _context7.stop();
           }
         }
-      }, _callee6);
+      }, _callee7);
     }))();
   }
 });
@@ -43914,7 +43979,24 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _vm._m(2, true)
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-sm",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteProduct(product, index)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fas fa-trash" }),
+                          _vm._v(
+                            "\n                                Delete\n                            "
+                          )
+                        ]
+                      )
                     ])
                   ])
                 : _vm._e()
@@ -43945,7 +44027,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(2),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
@@ -44208,7 +44290,7 @@ var render = function() {
           { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _vm._m(3),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", { attrs: { enctype: "multipart/form-data" } }, [
@@ -44430,12 +44512,18 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
+                    attrs: {
+                      type: "button",
+                      disabled: _vm.isUpdating,
+                      loading: _vm.isUpdating
+                    },
                     on: { click: _vm.submitEditProductForm }
                   },
                   [
                     _vm._v(
-                      "\n                        Update\n                    "
+                      "\n                        " +
+                        _vm._s(_vm.isUpdating ? "Updating..." : "Update Now") +
+                        "\n                    "
                     )
                   ]
                 )
@@ -44495,21 +44583,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("Action")])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
-      [
-        _c("i", { staticClass: "fas fa-trash" }),
-        _vm._v(
-          "\n                                Delete\n                            "
-        )
-      ]
-    )
   },
   function() {
     var _vm = this
@@ -60621,8 +60694,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! F:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! F:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
