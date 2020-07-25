@@ -162,7 +162,7 @@ class AdminController extends Controller
         ]);
         $product = Product::find($request->id);
         $imageName =  $product->productImage;
-        $imageLocation = public_path('uploads/').$imageName;
+        $imageLocation = public_path().'uploads/'.$imageName;
         //return Category::where('id', $request->id)->delete();
         $deleted = $product->delete();
         if($deleted){

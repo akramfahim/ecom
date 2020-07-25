@@ -196,7 +196,6 @@ export default {
                 productName: '',
                 productDescription: '',
                 category_id : '',
-                category : '',
                 productPrice : '',
                 productImage : '',
                 productStatus: ''

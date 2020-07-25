@@ -42,6 +42,30 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
+                            <router-link to="orders" class="nav-link">
+                                <i class="nav-icon fas fa-cart-plus"></i>
+                                <p>
+                                    Order
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="customers" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Customer
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="adminusers" class="nav-link">
+                                <i class="nav-icon fas fa-users-cog"></i>
+                                <p>
+                                    Admin Users
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
                             <router-link to="about-us" class="nav-link">
                                 <i class="nav-icon fas fa-info-circle"></i>
                                 <p>
