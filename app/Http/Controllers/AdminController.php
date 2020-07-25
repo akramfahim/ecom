@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Category;
 use App\Product;
+use App\User;
 
 class AdminController extends Controller
 {
@@ -181,13 +182,25 @@ class AdminController extends Controller
     public function addAdminUser(Request $request)
     {
         $this->validate($request,[
-            'fullname' => 'required',
+            'fullName' => 'required',
             'email'=> 'bail|required|email',
             'password' => 'required|min:5',
             'userType' => 'required'
         ]);
 
-        return $request->password;
+        $password = bcrypt($request->password);
+        
+        return User::create([
+            'fullName' => $request->fullName,
+            'email' => $request->email,
+            'password' => $password,
+            'userType' => $request->userType
+        ]);
+    }
+
+    public function allAdminUsers()
+    {
+        return User::orderBy('id','desc')->get();
     }
 
 }

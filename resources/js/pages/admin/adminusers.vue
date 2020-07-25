@@ -23,17 +23,23 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>User Type</th>
+                            <th>Status</th>
                             <th>Created at</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>111</td>
-                            <td>Akram Fahim</td>
-                            <td>akram@gmail.com</td>
-                            <td>Admin</td>
-                            <td>27th Jul 2020</td>
+                        <tr v-for="(user,index) in adminusers" :key="index" v-if="adminusers.length">
+                            <td>{{index}}</td>
+                            <td>{{ user.fullName}}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.userType}}</td>
+                            <td>
+                                <button class="btn btn-sm" :class="(user.isActive)==0 ? 'btn-danger' : 'btn-success' ">
+                                    {{ (user.isActive ==0) ? 'Inactive' : 'Active' }}
+                                </button>
+                            </td>
+                            <td>{{ user.created_at }}</td>
                             <td>
                                     <button class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
@@ -132,10 +138,16 @@ export default {
                 email: '',
                 password: '',
                 userType: ''
-            }
+            },
+            adminusers : []
         }
     },
-    methods:{
+    methods: {
+        async loadAdminUsers(){
+            const res = await this.callApi('get','/app/all_adminusers')
+
+            this.adminusers = res.data
+        },
         async createAdminUser(){
             if(this.data.fullName.trim() == '') return this.error('Full Name is Required')
             if(this.data.email.trim() == '') return this.error('Email is Required')
@@ -144,15 +156,14 @@ export default {
 
             const res = await this.callApi('post','/app/add_adminuser',this.data)
             if(res.status == 201){
-                //this.products.unshift(res.data.product)
+                this.adminusers.unshift(res.data)
                 $('#addNewModal').modal('hide')
                 this.success('Product Added Successfully');
                 
                 this.data.fullName='',
                 this.data.email='',
                 this.data.password='',
-                this.data.productImage='',
-                this.data.productImage=''
+                this.data.userType=''
 
             }else if(res.status == 422){
                 if(res.data.errors.fullName){
@@ -169,6 +180,10 @@ export default {
             }
 
         }
+    },
+
+    async created(){
+        await this.loadAdminUsers()
     }
 
 

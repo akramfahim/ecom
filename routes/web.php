@@ -45,6 +45,7 @@ Route::post('/app/delete_product','AdminController@deleteProduct');
 
 //Admin User CRUD
 Route::post('/app/add_adminuser','AdminController@addAdminUser');
+Route::get('/app/all_adminusers','AdminController@allAdminUsers');
 
 
 Route::post('/app/upload_image','AdminController@uploadImage');

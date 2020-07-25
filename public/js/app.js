@@ -2128,6 +2128,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2136,11 +2142,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         email: '',
         password: '',
         userType: ''
-      }
+      },
+      adminusers: []
     };
   },
   methods: {
-    createAdminUser: function createAdminUser() {
+    loadAdminUsers: function loadAdminUsers() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
@@ -2149,73 +2156,117 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                if (!(_this.data.fullName.trim() == '')) {
-                  _context.next = 2;
-                  break;
-                }
-
-                return _context.abrupt("return", _this.error('Full Name is Required'));
+                _context.next = 2;
+                return _this.callApi('get', '/app/all_adminusers');
 
               case 2:
-                if (!(_this.data.email.trim() == '')) {
-                  _context.next = 4;
-                  break;
-                }
-
-                return _context.abrupt("return", _this.error('Email is Required'));
+                res = _context.sent;
+                _this.adminusers = res.data;
 
               case 4:
-                if (!(_this.data.password.trim() == '')) {
-                  _context.next = 6;
-                  break;
-                }
-
-                return _context.abrupt("return", _this.error('Password is Required'));
-
-              case 6:
-                if (!(_this.data.userType.trim() == '')) {
-                  _context.next = 8;
-                  break;
-                }
-
-                return _context.abrupt("return", _this.error('Admin Type is Required'));
-
-              case 8:
-                _context.next = 10;
-                return _this.callApi('post', '/app/add_adminuser', _this.data);
-
-              case 10:
-                res = _context.sent;
-
-                if (res.status == 201) {
-                  //this.products.unshift(res.data.product)
-                  $('#addNewModal').modal('hide');
-
-                  _this.success('Product Added Successfully');
-
-                  _this.data.fullName = '', _this.data.email = '', _this.data.password = '', _this.data.productImage = '', _this.data.productImage = '';
-                } else if (res.status == 422) {
-                  if (res.data.errors.fullName) {
-                    _this.error(res.data.errors.fullName[0]);
-                  } else if (res.data.errors.email) {
-                    _this.error(res.data.errors.email[0]);
-                  } else if (res.data.errors.password) {
-                    _this.error(res.data.errors.password[0]);
-                  } else if (res.data.errors.userType) {
-                    _this.error(res.data.errors.productImage[0]);
-                  }
-                } else {
-                  _this.swr();
-                }
-
-              case 12:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    createAdminUser: function createAdminUser() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                if (!(_this2.data.fullName.trim() == '')) {
+                  _context2.next = 2;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.error('Full Name is Required'));
+
+              case 2:
+                if (!(_this2.data.email.trim() == '')) {
+                  _context2.next = 4;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.error('Email is Required'));
+
+              case 4:
+                if (!(_this2.data.password.trim() == '')) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.error('Password is Required'));
+
+              case 6:
+                if (!(_this2.data.userType.trim() == '')) {
+                  _context2.next = 8;
+                  break;
+                }
+
+                return _context2.abrupt("return", _this2.error('Admin Type is Required'));
+
+              case 8:
+                _context2.next = 10;
+                return _this2.callApi('post', '/app/add_adminuser', _this2.data);
+
+              case 10:
+                res = _context2.sent;
+
+                if (res.status == 201) {
+                  _this2.adminusers.unshift(res.data);
+
+                  $('#addNewModal').modal('hide');
+
+                  _this2.success('Product Added Successfully');
+
+                  _this2.data.fullName = '', _this2.data.email = '', _this2.data.password = '', _this2.data.userType = '';
+                } else if (res.status == 422) {
+                  if (res.data.errors.fullName) {
+                    _this2.error(res.data.errors.fullName[0]);
+                  } else if (res.data.errors.email) {
+                    _this2.error(res.data.errors.email[0]);
+                  } else if (res.data.errors.password) {
+                    _this2.error(res.data.errors.password[0]);
+                  } else if (res.data.errors.userType) {
+                    _this2.error(res.data.errors.productImage[0]);
+                  }
+                } else {
+                  _this2.swr();
+                }
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
+  },
+  created: function created() {
+    var _this3 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return _this3.loadAdminUsers();
+
+            case 2:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }))();
   }
 });
 
@@ -43751,7 +43802,57 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
+    _c("div", { staticClass: "card" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body table-responsive p-0" }, [
+        _c("table", { staticClass: "table table-hover text-nowrap" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.adminusers, function(user, index) {
+              return _vm.adminusers.length
+                ? _c("tr", { key: index }, [
+                    _c("td", [_vm._v(_vm._s(index))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.fullName))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.email))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.userType))]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm",
+                          class:
+                            user.isActive == 0 ? "btn-danger" : "btn-success"
+                        },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(
+                                user.isActive == 0 ? "Inactive" : "Active"
+                              ) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(user.created_at))]),
+                    _vm._v(" "),
+                    _vm._m(2, true)
+                  ])
+                : _vm._e()
+            }),
+            0
+          )
+        ])
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -43773,7 +43874,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
+              _vm._m(3),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
@@ -43938,7 +44039,7 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(2)
+    _vm._m(4)
   ])
 }
 var staticRenderFns = [
@@ -43946,85 +44047,70 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _c("h2", { staticClass: "card-title" }, [
-          _vm._v("\n                Admin User List\n            ")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-tools" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-sm btn-success",
-              attrs: { "data-toggle": "modal", "data-target": "#addNewModal" }
-            },
-            [
-              _c("i", { staticClass: "fas fa-plus" }),
-              _vm._v(
-                " \n                    Create Admin User\n                "
-              )
-            ]
-          )
-        ])
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h2", { staticClass: "card-title" }, [
+        _vm._v("\n                Admin User List\n            ")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body table-responsive p-0" }, [
-        _c("table", { staticClass: "table table-hover text-nowrap" }, [
-          _c("thead", [
-            _c("tr", [
-              _c("th", [_vm._v("ID")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Name")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Email")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("User Type")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Created at")]),
-              _vm._v(" "),
-              _c("th", [_vm._v("Action")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("tbody", [
-            _c("tr", [
-              _c("td", [_vm._v("111")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Akram Fahim")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("akram@gmail.com")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("Admin")]),
-              _vm._v(" "),
-              _c("td", [_vm._v("27th Jul 2020")]),
-              _vm._v(" "),
-              _c("td", [
-                _c("button", { staticClass: "btn btn-primary btn-sm" }, [
-                  _c("i", { staticClass: "fas fa-edit" }),
-                  _vm._v(
-                    "\n                                    Edit\n                                "
-                  )
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger btn-sm",
-                    attrs: { type: "button" }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-trash" }),
-                    _vm._v(
-                      "\n                                    Delete\n                                "
-                    )
-                  ]
-                )
-              ])
-            ])
-          ])
-        ])
+      _c("div", { staticClass: "card-tools" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-sm btn-success",
+            attrs: { "data-toggle": "modal", "data-target": "#addNewModal" }
+          },
+          [
+            _c("i", { staticClass: "fas fa-plus" }),
+            _vm._v(" \n                    Create Admin User\n                ")
+          ]
+        )
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Email")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("User Type")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Status")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Created at")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Action")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-primary btn-sm" }, [
+        _c("i", { staticClass: "fas fa-edit" }),
+        _vm._v(
+          "\n                                    Edit\n                                "
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-danger btn-sm", attrs: { type: "button" } },
+        [
+          _c("i", { staticClass: "fas fa-trash" }),
+          _vm._v(
+            "\n                                    Delete\n                                "
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -61662,8 +61748,8 @@ var routes = [{
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! F:\laragon\www\ecom\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! F:\laragon\www\ecom\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
