@@ -53,7 +53,7 @@
                             <router-link to="customers" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
-                                    Customer
+                                    Customers
                                 </p>
                             </router-link>
                         </li>

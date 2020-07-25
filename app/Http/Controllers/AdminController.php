@@ -176,4 +176,18 @@ class AdminController extends Controller
         }
     }
 
+
+    // Admin User Start
+    public function addAdminUser(Request $request)
+    {
+        $this->validate($request,[
+            'fullname' => 'required',
+            'email'=> 'bail|required|email',
+            'password' => 'required|min:5',
+            'userType' => 'required'
+        ]);
+
+        return $request->password;
+    }
+
 }

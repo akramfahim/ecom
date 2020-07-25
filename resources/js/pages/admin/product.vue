@@ -57,7 +57,7 @@
               <!-- /.card-body -->
         </div>
 
-        <!-- Add New Category Modal -->
+        <!-- Add New Product Modal -->
         <div class="modal fade" id="addNewModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <!-- Edit Category Modal -->
+        <!-- Edit Product Modal -->
         <div class="modal fade" id="editModal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -258,6 +258,14 @@ export default {
                 this.products.unshift(res.data.product)
                 $('#addNewModal').modal('hide')
                 this.success('Product Added Successfully');
+                
+                this.data.productName='',
+                this.data.productDescription='',
+                this.data.category_id='',
+                this.data.productImage='',
+                this.data.productPrice='',
+                this.data.productStatus=''
+
             }else if(res.status == 422){
                 if(res.data.errors.productName){
                     this.error(res.data.errors.productName[0])
