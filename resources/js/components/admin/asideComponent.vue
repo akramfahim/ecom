@@ -1,6 +1,6 @@
 <template>
     <div>
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primay elevation-4">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
                 <img src="/img/logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -66,20 +66,12 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="about-us" class="nav-link">
-                                <i class="nav-icon fas fa-info-circle"></i>
+                            <a href="/logout" class="nav-link">
+                                <i class="nav-icon fas fa-power-off"></i>
                                 <p>
-                                    About Us
+                                    Logout
                                 </p>
-                            </router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link to="privacy-policy" class="nav-link">
-                                <i class="nav-icon fas fa-book-open"></i>
-                                <p>
-                                    Privacy Policy
-                                </p>
-                            </router-link>
+                            </a>
                         </li>
                     </ul>
                 </nav>

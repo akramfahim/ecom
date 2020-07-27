@@ -13,20 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin');
-});
+Route::get('/', 'AdminController@index');
+Route::get('/logout', 'AdminController@logout');
 Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::any('{slug}',function(){
-    return view('admin');
-});
-
-
-
-
+Route::any('{slug}','AdminController@index');
 
 
 // Admin Area
@@ -46,6 +39,13 @@ Route::post('/app/delete_product','AdminController@deleteProduct');
 //Admin User CRUD
 Route::post('/app/add_adminuser','AdminController@addAdminUser');
 Route::get('/app/all_adminusers','AdminController@allAdminUsers');
-
-
+Route::post('/app/edit_adminuser','AdminController@editAdminUser');
+Route::post('/app/delete_adminuser','AdminController@deleteAdminUser');
+// Photo Upload
 Route::post('/app/upload_image','AdminController@uploadImage');
+
+// Admin Login
+Route::post('/app/login_admin','AdminController@loginAdmin');
+
+
+

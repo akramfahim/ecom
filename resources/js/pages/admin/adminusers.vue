@@ -35,17 +35,17 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.userType}}</td>
                             <td>
-                                <button class="btn btn-sm" :class="(user.isActive)==0 ? 'btn-danger' : 'btn-success' ">
-                                    {{ (user.isActive ==0) ? 'Inactive' : 'Active' }}
+                                <button class="btn btn-sm" :class="(user.status)==0 ? 'btn-danger' : 'btn-success' ">
+                                    {{ (user.status ==0) ? 'Inactive' : 'Active' }}
                                 </button>
                             </td>
                             <td>{{ user.created_at }}</td>
                             <td>
-                                    <button class="btn btn-primary btn-sm">
+                                    <button class="btn btn-primary btn-sm" @click="showEditModal(user,index)">
                                         <i class="fas fa-edit"></i>
                                         Edit
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-sm">
+                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteAdminUser(user,index)">
                                         <i class="fas fa-trash"></i>
                                         Delete
                                     </button>
@@ -87,6 +87,13 @@
                                     <option value="user">User</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <select class="form-control" v-model="data.status">
+                                    <option value="">Select Admin Status</option>
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -112,14 +119,32 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="categoryName" placeholder="Category Name">
+                                <input type="text" v-model="editData.fullName" placeholder="Full Name" class="form-control">
                             </div>
+                            <div class="form-group">
+                                <input type="email" v-model="editData.email" placeholder="Email Address" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" v-model="editData.userType">
+                                    <option value="admin">Admin</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="moderator">Moderator</option>
+                                    <option value="user">User</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" v-model="editData.status">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">
-                            Update Now
+                        <button type="button" class="btn btn-primary" @click="editAdminUser" :disabled="isUpdating" :loading="isUpdating">
+                            {{ isUpdating ? 'Updating...' : 'Update Now'}}
                         </button>
                     </div>
                 </div>
@@ -137,9 +162,20 @@ export default {
                 fullName: '',
                 email: '',
                 password: '',
-                userType: ''
+                userType: '',
+                status: ''
             },
-            adminusers : []
+            isAdding: false,
+            adminusers : [],
+
+            editData: {
+                fullName: '',
+                email: '',
+                userType: '',
+                status: ''
+            },
+            index: -1,
+            isUpdating : false
         }
     },
     methods: {
@@ -163,7 +199,8 @@ export default {
                 this.data.fullName='',
                 this.data.email='',
                 this.data.password='',
-                this.data.userType=''
+                this.data.userType='',
+                this.data.status=''
 
             }else if(res.status == 422){
                 if(res.data.errors.fullName){
@@ -172,13 +209,58 @@ export default {
                     this.error(res.data.errors.email[0])
                 }else if(res.data.errors.password){
                     this.error(res.data.errors.password[0])
-                }else if(res.data.errors.userType){
-                    this.error(res.data.errors.productImage[0])
                 }
             }else{
                 this.swr()
             }
 
+        },
+
+        showEditModal(user,index){
+            let obj = {
+                id : user.id,
+                fullName: user.fullName,
+                email : user.email,
+                userType: user.userType,
+                status: user.status,
+            }
+            this.editData = obj
+            this.index = index
+            $('#editModal').modal('show')
+        },
+        async editAdminUser(){
+            if(this.editData.fullName.trim()=='') return this.error('EullName is Required')
+            if(this.editData.email.trim()=='') return this.error('Email is Required')
+            if(this.editData.userType=='') return this.error('Admin Type is Required')
+            if(this.editData.status=='') return this.error('Status is Required')
+
+            const res = await this.callApi('post','/app/edit_adminuser', this.editData)
+            if(res.status == 200){
+
+                this.adminusers[this.index].fullName = this.editData.fullName
+                this.adminusers[this.index].email = this.editData.email
+                this.adminusers[this.index].userType = this.editData.userType
+                this.adminusers[this.index].status = this.editData.status
+
+                this.success('Admin Information Updated Successfully')
+
+                //close modal
+                $('#editModal').modal('hide')
+            }else{
+                this.error('Admin Can not be updated')
+            }
+        },
+
+        async deleteAdminUser(user, index){
+            if(!confirm('Are You Sure')) return
+    
+            const res = await this.callApi('post','/app/delete_adminuser', user)
+            if(res.status == 200){
+                this.adminusers.splice(index,1)
+                this.success('Admin Deleted Successfully')
+            }else{
+                this.swr()
+            }
         }
     },
 

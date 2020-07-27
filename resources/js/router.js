@@ -11,6 +11,7 @@ import product from './pages/admin/product'
 import order from './pages/admin/order'
 import customer from './pages/admin/customer'
 import adminusers from './pages/admin/adminusers'
+import login from './pages/admin/login'
 
 const routes = [
     {
@@ -42,6 +43,10 @@ const routes = [
     {
         path: '/adminusers',
         component: adminusers
+    },
+    {
+        path: '/login',
+        component: login
     }
 ];
 

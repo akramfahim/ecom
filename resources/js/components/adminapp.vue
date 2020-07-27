@@ -1,11 +1,11 @@
 <template>
     <div>
         <!-- Navbar -->
-        <topNavbar></topNavbar>
+        <topNavbar v-if="isLoggedin"></topNavbar>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <asideComponent></asideComponent>
+        <asideComponent v-if="isLoggedin"></asideComponent>
         <!-- /.Main Sidebar Container --> 
 
         <!-- Content Wrapper. Contains page content -->
@@ -24,7 +24,7 @@
 
 
         <!-- Main Footer -->
-        <footerComponent></footerComponent>
+        <footerComponent v-if="isLoggedin"></footerComponent>
         <!-- /.Main Footer -->
         
     </div>
@@ -36,6 +36,11 @@ import topNavbar from './admin/topNavbar'
 import asideComponent from './admin/asideComponent'
 import footerComponent from './admin/footerComponent'
 export default {
+    data(){
+        return {
+            isLoggedin: false
+        }
+    },
     components:{
         topNavbar,
         asideComponent,

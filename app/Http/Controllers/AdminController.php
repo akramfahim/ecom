@@ -6,9 +6,34 @@ use Illuminate\Http\Request;
 use App\Category;
 use App\Product;
 use App\User;
+use Auth;
 
 class AdminController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        if(!Auth::check() && $request->path() != 'login'){
+            return redirect('/login');
+        }
+        if(!Auth::check() && $request->path() == 'login'){
+            return view('admin');
+        }
+        $user = Auth::user();
+        if($user->userType == 'user'){
+            return redirect('/login');
+        }
+        if($request->path() == 'login'){
+            return redirect('/');
+        }
+        return view('admin');
+    }
+    //logout 
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login');
+    }
     
     public function allCategories()
     {
@@ -185,7 +210,8 @@ class AdminController extends Controller
             'fullName' => 'required',
             'email'=> 'bail|required|email',
             'password' => 'required|min:5',
-            'userType' => 'required'
+            'userType' => 'required',
+            'status' => 'sometimes| required'
         ]);
 
         $password = bcrypt($request->password);
@@ -194,13 +220,75 @@ class AdminController extends Controller
             'fullName' => $request->fullName,
             'email' => $request->email,
             'password' => $password,
-            'userType' => $request->userType
+            'userType' => $request->userType,
+            'status' => $request->status,
         ]);
     }
 
     public function allAdminUsers()
     {
         return User::orderBy('id','desc')->get();
+    }
+
+    public function editAdminUser(Request $request)
+    {
+        $this->validate($request, [
+            'id'=> 'required',
+            'fullName' => 'required',
+            'email' => 'required| unique:products,productName,'.$request->id,
+            'userType' => 'required',
+            'status' => 'sometimes|required',
+        ]);
+        $product = User::find($request->id);
+        
+
+        return $product->update([
+            'fullName' => $request->fullName,
+            'email' =>  $request->email,
+            'userType' =>  $request->userType,
+            'status' =>  $request->status,
+        ]);
+    }
+
+    //delete Admin User
+    public function deleteAdminUser(Request $request)
+    {
+        $this->validate($request, [
+            'id'=> 'required'
+        ]);
+        $adminuser = User::find($request->id);
+        $deleted = $adminuser->delete();
+        if($deleted){
+            return response()->json([
+                'msg' => 'Admin Deleted Successfully'
+            ],200);
+        }
+    }
+
+    public function loginAdmin(Request $request)
+    {
+        $this->validate($request,[
+            'email' => 'bail | required | email',
+            'password' => 'bail | required | min:6'
+        ]);
+
+        if( Auth::attempt(['email' => $request->email, 'password' => $request->password ]) ){
+            $user =  Auth::user();
+            if($user->userType == 'user'){
+                return response()->json([
+                    'msg' => 'Incorrect Login Details'
+                ],401);
+            }else{
+                return response()->json([
+                    'msg' => 'You are login Now'
+                ]);
+            }
+            
+        }else{
+            return response()->json([
+                'msg' => 'Incorrect Login Details'
+            ],401);
+        }
     }
 
 }
