@@ -46,6 +46,7 @@ export default {
             const res = await this.callApi('post','app/login_admin',this.data)
             if(res.status === 200){
                 this.success('You Are Login Now')
+                window.location = '/'
             }else if(res.status === 401){
                 this.error(res.data.msg)
             }else{

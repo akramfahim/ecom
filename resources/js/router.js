@@ -4,12 +4,11 @@ Vue.use(Router)
 
 import aboutUs from './pages/about-us'
 import privacyPolicy from './pages/privacy-policy'
-//vuex Start
-import allcom from './vuex/allcom'
 
 //Admin Area
-import category from './pages/admin/category'
-import product from './pages/admin/product'
+import dashboard from './pages/admin/dashboard'
+import categories from './pages/admin/category'
+import products from './pages/admin/product'
 import order from './pages/admin/order'
 import customer from './pages/admin/customer'
 import adminusers from './pages/admin/adminusers'
@@ -24,19 +23,19 @@ const routes = [
         path: '/privacy-policy',
         component: privacyPolicy
     },
-    {
-        path: '/allcom',
-        component: allcom
-    },
 
     //Admin Area
     {
-        path: '/category',
-        component: category
+        path: '/',
+        component: dashboard
     },
     {
-        path: '/product',
-        component: product
+        path: '/categories',
+        component: categories
+    },
+    {
+        path: '/products',
+        component: products
     },
     {
         path: '/orders',

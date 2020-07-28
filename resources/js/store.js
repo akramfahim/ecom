@@ -5,15 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        counter: 0
+        loggedInUser: false
     },
-
+    getters:{
+        
+    },
     mutations:{
-        increase(state,payload){
-            this.state.counter += payload
-        },
-        decrease(state,payload){
-            this.state.counter += -payload
+        loggedInUserInfo(state,data){
+            state.loggedInUser = data
         }
+        
+    },
+    actions: {
     }
+    
 })

@@ -17,7 +17,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition sidebar-mini">
   <div class="wrapper" id="app">
 
-    <adminapp></adminapp>
+    @if(Auth::check())
+      <adminapp :user="{{ Auth::user() }}"></adminapp>
+    @else
+      <adminapp :user="false"></adminapp>
+    @endif
 
   </div>
   <!-- REQUIRED SCRIPTS -->

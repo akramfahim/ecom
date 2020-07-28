@@ -26,7 +26,15 @@
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <router-link to="category" class="nav-link">
+                            <router-link to="/" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="categories" class="nav-link">
                                 <i class="nav-icon fas fa-certificate"></i>
                                 <p>
                                     Category
@@ -34,7 +42,7 @@
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="product" class="nav-link">
+                            <router-link to="products" class="nav-link">
                                 <i class="nav-icon fas fa-list-alt"></i>
                                 <p>
                                     Product
@@ -57,7 +65,7 @@
                                 </p>
                             </router-link>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="isAdmin">
                             <router-link to="adminusers" class="nav-link">
                                 <i class="nav-icon fas fa-users-cog"></i>
                                 <p>
@@ -82,3 +90,27 @@
 
     </div>
 </template>
+<script>
+export default {
+    data(){
+        return {
+            userType : '',
+            isAdmin : false,
+            isEditor: false,
+            isModerator: false
+        }
+    },
+    created(){
+        //console.log(this.user)
+        this.userType = this.$store.state.loggedInUser.userType
+        
+        if(this.userType === 'admin'){
+            this.isAdmin = true
+        }else if(this.userType === 'editor'){
+            this.isEditor = true
+        }else{
+            this.isModerator = true
+        }
+    }
+}
+</script>
