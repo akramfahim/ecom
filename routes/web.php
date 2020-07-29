@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\AdminCheck;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,38 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+
+// Admin Area
+
+Route::prefix('app')->middleware([AdminCheck::class])->group(function(){
+
+    //category Crud
+    Route::post('add_category', 'AdminController@addCategory');
+    Route::get('all_categories', 'AdminController@allCategories');
+    Route::post('edit_category', 'AdminController@editCategory');
+    Route::post('delete_category', 'AdminController@deleteCategory');
+
+    //product CRUD
+    Route::post('add_product','AdminController@addProduct');
+    Route::get('all_products','AdminController@allProducts');
+    Route::post('edit_product','AdminController@editProduct');
+    Route::post('delete_product','AdminController@deleteProduct');
+
+    //Admin User CRUD
+    Route::post('add_adminuser','AdminController@addAdminUser');
+    Route::get('all_adminusers','AdminController@allAdminUsers');
+    Route::post('edit_adminuser','AdminController@editAdminUser');
+    Route::post('delete_adminuser','AdminController@deleteAdminUser');
+    // Photo Upload
+    Route::post('upload_image','AdminController@uploadImage');
+
+    // Admin Login
+    Route::post('login_admin','AdminController@loginAdmin');
+
+});
+
 Route::get('/', 'AdminController@index');
 Route::get('/logout', 'AdminController@logout');
 Route::get('/welcome', function () {
@@ -22,30 +55,6 @@ Route::get('/welcome', function () {
 Route::any('{slug}','AdminController@index');
 
 
-// Admin Area
-
-//category Crud
-Route::post('/app/add_category', 'AdminController@addCategory');
-Route::get('/app/all_categories', 'AdminController@allCategories');
-Route::post('/app/edit_category', 'AdminController@editCategory');
-Route::post('/app/delete_category', 'AdminController@deleteCategory');
-
-//product CRUD
-Route::post('/app/add_product','AdminController@addProduct');
-Route::get('/app/all_products','AdminController@allProducts');
-Route::post('/app/edit_product','AdminController@editProduct');
-Route::post('/app/delete_product','AdminController@deleteProduct');
-
-//Admin User CRUD
-Route::post('/app/add_adminuser','AdminController@addAdminUser');
-Route::get('/app/all_adminusers','AdminController@allAdminUsers');
-Route::post('/app/edit_adminuser','AdminController@editAdminUser');
-Route::post('/app/delete_adminuser','AdminController@deleteAdminUser');
-// Photo Upload
-Route::post('/app/upload_image','AdminController@uploadImage');
-
-// Admin Login
-Route::post('/app/login_admin','AdminController@loginAdmin');
 
 
 

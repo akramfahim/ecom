@@ -20,7 +20,7 @@ class AdminController extends Controller
             return view('admin');
         }
         $user = Auth::user();
-        if($user->userType == 'user'){
+        if($user->userType == 'user' || $user->status == 0){
             return redirect('/login');
         }
         if($request->path() == 'login'){
@@ -274,14 +274,14 @@ class AdminController extends Controller
 
         if( Auth::attempt(['email' => $request->email, 'password' => $request->password ]) ){
             $user =  Auth::user();
-            if($user->userType == 'user'){
+            if($user->userType == 'user' || $user->status == 0){
                 return response()->json([
                     'msg' => 'Incorrect Login Details'
                 ],401);
             }else{
                 return response()->json([
                     'msg' => 'You are login Now'
-                ]);
+                ],200);
             }
             
         }else{

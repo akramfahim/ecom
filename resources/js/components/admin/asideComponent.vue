@@ -16,7 +16,7 @@
                         <img src="/img/admin-pp.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Akram Fahim</a>
+                        <a href="#" class="d-block">{{ $store.state.loggedInUser.fullName}} | {{ $store.state.loggedInUser.userType }}</a>
                     </div>
                 </div>
 

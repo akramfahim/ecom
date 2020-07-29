@@ -43800,7 +43800,19 @@ var render = function() {
         _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "sidebar" }, [
-          _vm._m(1),
+          _c("div", { staticClass: "user-panel mt-3 pb-3 mb-3 d-flex" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("div", { staticClass: "info" }, [
+              _c("a", { staticClass: "d-block", attrs: { href: "#" } }, [
+                _vm._v(
+                  _vm._s(_vm.$store.state.loggedInUser.fullName) +
+                    " | " +
+                    _vm._s(_vm.$store.state.loggedInUser.userType)
+                )
+              ])
+            ])
+          ]),
           _vm._v(" "),
           _c("nav", { staticClass: "mt-2" }, [
             _c(
@@ -43979,19 +43991,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "user-panel mt-3 pb-3 mb-3 d-flex" }, [
-      _c("div", { staticClass: "image" }, [
-        _c("img", {
-          staticClass: "img-circle elevation-2",
-          attrs: { src: "/img/admin-pp.jpg", alt: "User Image" }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "info" }, [
-        _c("a", { staticClass: "d-block", attrs: { href: "#" } }, [
-          _vm._v("Akram Fahim")
-        ])
-      ])
+    return _c("div", { staticClass: "image" }, [
+      _c("img", {
+        staticClass: "img-circle elevation-2",
+        attrs: { src: "/img/admin-pp.jpg", alt: "User Image" }
+      })
     ])
   },
   function() {
@@ -63220,15 +63224,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /*!**********************************************************!*\
   !*** ./resources/js/components/admin/asideComponent.vue ***!
   \**********************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _asideComponent_vue_vue_type_template_id_34477fb0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./asideComponent.vue?vue&type=template&id=34477fb0& */ "./resources/js/components/admin/asideComponent.vue?vue&type=template&id=34477fb0&");
 /* harmony import */ var _asideComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./asideComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/admin/asideComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _asideComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _asideComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -63258,7 +63261,7 @@ component.options.__file = "resources/js/components/admin/asideComponent.vue"
 /*!***********************************************************************************!*\
   !*** ./resources/js/components/admin/asideComponent.vue?vue&type=script&lang=js& ***!
   \***********************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
